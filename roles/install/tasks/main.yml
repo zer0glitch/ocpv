@@ -1,7 +1,7 @@
 - name: Apply the Openshift Operator Subscriptions
   kubernetes.core.k8s:
     template: "{{ role_path }}/files/kubevirt-hyperconverged.yaml"
-  
+ 
 - name: wait for Openshift Virtualizatoin Operator to install
   shell: |
     oc get operators kubevirt-hyperconverged.openshift-cnv  -o yaml
@@ -12,6 +12,6 @@
 
 - name: Deploy hyperconverged for Openshift Virtualizaion
   kubernetes.core.k8s:
-   template: "{{ role_path }}/files/hyperconverged.yaml"
+    template: "{{ role_path }}/files/hyperconverged.yaml"
 
 # TODO: Add a wait for the install
