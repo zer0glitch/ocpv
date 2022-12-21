@@ -1,8 +1,16 @@
 ---
 # tasks file for running
 
+- name: ensure values exists: 
+  assert:
+    that:
+    - vm_name is deifned
+    - project is deifned
+    - state is deifned
+    quiet: True
+  
 - name: create virtual machine
-  kubernetes.core.k8s:
+  kubernetes.core.k8s_json_patch:
     kind: VirtualMachine
     name: "{{ vm_name }}"
     namespace: "{{ project }}"
