@@ -1,0 +1,12 @@
+---
+# tasks file for running
+
+- name: create virtual machine
+  kubernetes.core.k8s:
+    kind: VirtualMachine
+    name: "{{ vm_name }}"
+    namespace: "{{ project }}"
+    patch:
+    - op: replace
+      patch: /spec/running
+      value: "{{ state }}"
