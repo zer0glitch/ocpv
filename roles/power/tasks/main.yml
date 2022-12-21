@@ -1,0 +1,23 @@
+---
+# tasks file for running
+
+- name: ensure values exists
+  assert:
+    that:
+    - vm_name is defined
+    - project is defined
+    - running is defined
+    quiet: True
+
+- name: change virtual machine running to {{ state }}
+  kubernetes.core.k8s:
+    merge_type: "merge"
+    namespace: "{{ project }}"
+    definition:
+      apiVersion: kubevirt.io/v1
+      kind: VirtualMachine
+      metadata:
+        name: "{{ vm_name }}"
+      spec:
+        running: "{{ running }}"
+
