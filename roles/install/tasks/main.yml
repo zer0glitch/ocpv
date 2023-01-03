@@ -9,9 +9,16 @@
   until: "'install strategy completed with no errors' in result.stdout"
   retries: 30
 
-
 - name: Deploy hyperconverged for Openshift Virtualizaion
   kubernetes.core.k8s:
     template: "{{ role_path }}/files/hyperconverged.yaml"
 
-# TODO: Add a wait for the install
+- name: Check for HCO installation
+  kubernetes.core.k8s_info:
+    kind: HyperConverged
+    api_version: hco.kubevirt.io/v1beta1
+    namespace: openshift-cnv
+  register: result
+  when: "result.resources[0].status.conditions|selectattr('type', 'in', 'Available')|selectattr('status', 'in', 'True')|length > 0"
+
+
