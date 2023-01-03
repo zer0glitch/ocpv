@@ -19,7 +19,7 @@
     api_version: hco.kubevirt.io/v1beta1
     namespace: openshift-cnv
   register: result
-  until: "result.resources is defined and result.resources[0].status.conditions|selectattr('type', 'in', 'Available')|selectattr('status', 'in', 'True')|length > 0"
+  until: "result.resources[0].status.conditions is defined and result.resources[0].status.conditions|selectattr('type', 'in', 'Available')|selectattr('status', 'in', 'True')|length > 0"
   retries: 30
 
 
