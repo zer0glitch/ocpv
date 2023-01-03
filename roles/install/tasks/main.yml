@@ -19,6 +19,7 @@
     api_version: hco.kubevirt.io/v1beta1
     namespace: openshift-cnv
   register: result
-  when: "result.resources[0].status.conditions|selectattr('type', 'in', 'Available')|selectattr('status', 'in', 'True')|length > 0"
+  when: "result.resources is defined and result.resources[0].status.conditions|selectattr('type', 'in', 'Available')|selectattr('status', 'in', 'True')|length > 0"
+
 
 
