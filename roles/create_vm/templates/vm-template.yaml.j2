@@ -19,6 +19,37 @@ spec:
         resources:
           requests:
             storage: "{{ root_volume_size|default('30') }}Gi"
+{% if data_volumes is defined %}
+{% for drive in data_volumes %}
+  - metadata:
+      name: '{{ vm_name }}-{{ drive.name }}'
+    spec:
+      pvc:
+        resources:
+          requests:
+            storage: {{ drive.size }}
+        #storageClassName: ocs-storagecluster-cephfs
+        #storageClassName: ocs-storagecluster-ceph-rbd
+        volumeMode: {{ volume_mode | default('Block') }}
+        accessModes:
+          - {{ access_mode } default('ReadWriteMany') }}
+      source:
+        blank: {}
+  #- apiVersion: cdi.kubevirt.io/v1beta1
+  #  metadata:
+  #    name: {{ vm_name }}-{{ drive.name }}
+  #  spec:
+  #    pvc:
+  #      volumeMode: Filesystem
+  #      accessModes:
+  #      - ReadWriteMany
+  #      resources:
+  #        requests:
+  #          storage: {{ drive.size }}
+  #    source: 
+  #      blank: {}
+{% endfor %}
+{% endif %}
   running: true
   template:
     metadata:
@@ -38,6 +69,13 @@ spec:
           - disk:
               bus: virtio
             name: "{{ vm_name }}-{{ random_string }}"
+{% if data_volumes is defined %}
+{% for drive in data_volumes %}
+          - disk:
+              bus: virtio
+            name: "{{ vm_name }}-{{ drive.name }}"
+{% endfor %}
+{% endif %}
           - disk:
               bus: virtio
             name: cloudinitdisk
@@ -60,17 +98,23 @@ spec:
       - dataVolume:
           name: "{{ vm_name }}-{{ random_string }}"
         name: "{{ vm_name }}-{{ random_string }}"
-      - cloudInitNoCloud:
+{% if data_volumes is defined %}
+{% for drive in data_volumes %}
+      - persistentVolumeClaim:
+          claimName: "{{ vm_name }}-{{ drive.name }}"
+        name: "{{ vm_name }}-{{ drive.name }}"
+{% endfor %}
+{% endif %}
+      - name: cloudinitdisk
+        cloudInitNoCloud:
           userData: |-
 {% if cloud_init is defined %}
             {{ cloud_init |indent( width=12, indentfirst=False) }}
 {% elif cloud_init_secret is defined %}
-            {{ cloud_init_secret |indent( width=12, indentfirst=False) }}
+            {{ cloud_init_secret |indent( width=8, indentfirst=False) }}
 {% else %}
             #cloud-config
-            user: "{{ user|default('redhatuser') }}"
+            user: "jamie"
             password: "{{ password|default('r3dh4t1!') }}"
             chpasswd: { expire: False }
 {% endif %}
-        name: cloudinitdisk
-
