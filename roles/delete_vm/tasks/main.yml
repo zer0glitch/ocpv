@@ -1,0 +1,13 @@
+---
+- name: print template
+  debug: 
+    msg: "Delete Virtual Machine {{ name }}"
+    verbosity: 2
+
+- name: delete virtual machine
+  kubernetes.core.k8s:
+    api_version: kubevirt.io/v1
+    kind: VirtualMachine
+    state: absent
+    namespace: "{{ project }}"
+    name: '{{ name }}'
