@@ -63,9 +63,9 @@ spec:
       - cloudInitNoCloud:
           userData: |-
 {% if cloud_init is defined %}
-            {{ cloud_init }}
-{% elsif cloud_init_secret is defined %}
-            {{ cloud_init_secret }}
+            {{ cloud_init |indent( width=12, indentfirst=False) }}
+{% elif cloud_init_secret is defined %}
+            {{ cloud_init_secret |indent( width=12, indentfirst=False) }}
 {% else %}
             #cloud-config
             user: "{{ user|default('redhatuser') }}"
