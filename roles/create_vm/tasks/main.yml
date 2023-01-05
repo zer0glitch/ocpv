@@ -1,5 +1,18 @@
 ---
-- name: print template
+- name: print network attachment template
+  debug: 
+    msg: "{{ lookup('template', 'vm-network-attachment-definition.yaml.j2') }}"
+    verbosity: 2
+  loop: "{{ network_interfaces }}"
+
+- name: create network attachment definition
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ project }}"
+    template: 'vm-network-attachment-definition.yaml.j2'
+  loop: "{{ network_interfaces }}"
+
+- name: print template for virtual machine
   debug: 
     msg: "{{ lookup('template', 'vm-template.yaml.j2') }}"
     verbosity: 2

@@ -32,7 +32,7 @@ spec:
         #storageClassName: ocs-storagecluster-ceph-rbd
         volumeMode: {{ volume_mode | default('Block') }}
         accessModes:
-          - {{ access_mode } default('ReadWriteMany') }}
+          - {{ access_mode | default('ReadWriteMany') }}
       source:
         blank: {}
   #- apiVersion: cdi.kubevirt.io/v1beta1
@@ -82,6 +82,13 @@ spec:
           interfaces:
           - masquerade: {}
             name: default
+{% if network_interfaces is defined %}
+{% for interface in network_interfaces %}
+          - bridge: {}
+            model: {{ interface.model | default('virtio') }}
+            name: {{ interface.name }}
+{% endfor %}
+{% endif %}
           networkInterfaceMultiqueue: true
           rng: {}
         machine:
@@ -93,6 +100,13 @@ spec:
       networks:
       - name: default
         pod: {}
+{% if network_interfaces is defined %}
+{% for interface in network_interfaces %}
+      - multus:
+          networkName: {{ interface.name }}-{{ interface.bridge_name }}
+        name: {{ interface.name }}
+{% endfor %}
+{% endif %}
       terminationGracePeriodSeconds: 180
       volumes:
       - dataVolume:
