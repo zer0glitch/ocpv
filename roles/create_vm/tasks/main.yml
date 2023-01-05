@@ -1,9 +1,24 @@
 ---
+- name: create secret if cloud_init_secret is present
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      type: Generic
+      metadata:
+        name: "{{ vm_name }}-cloud-init"
+        namespace: "{{ project | lower }}"
+      data:
+        userdata: "{{ cloud_init_secret  | b64encode }}"
+  when: cloud_init_secret is defined
+
 - name: print network attachment template
   debug: 
     msg: "{{ lookup('template', 'vm-network-attachment-definition.yaml.j2') }}"
     verbosity: 2
   loop: "{{ network_interfaces }}"
+  when: network_interfaces is defined
 
 - name: create network attachment definition
   kubernetes.core.k8s:
@@ -11,6 +26,7 @@
     namespace: "{{ project }}"
     template: 'vm-network-attachment-definition.yaml.j2'
   loop: "{{ network_interfaces }}"
+  when: network_interfaces is defined
 
 - name: print template for virtual machine
   debug: 

@@ -119,16 +119,21 @@ spec:
         name: "{{ vm_name }}-{{ drive.name }}"
 {% endfor %}
 {% endif %}
+{% if cloud_init_secret is defined %}
+      - name: cloudinitdisk
+        cloudInitConfigDrive:
+          secretRef:
+            name: {{ vm_name }}-cloud-init
+{% else %}
       - name: cloudinitdisk
         cloudInitNoCloud:
           userData: |-
 {% if cloud_init is defined %}
             {{ cloud_init |indent( width=12, indentfirst=False) }}
-{% elif cloud_init_secret is defined %}
-            {{ cloud_init_secret |indent( width=8, indentfirst=False) }}
 {% else %}
             #cloud-config
-            user: "jamie"
+            user: "{{ user | default('cloud-user') }}"
             password: "{{ password|default('r3dh4t1!') }}"
             chpasswd: { expire: False }
+{% endif %}
 {% endif %}
