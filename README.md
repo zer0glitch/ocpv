@@ -6,12 +6,13 @@ Create VM
 
 - User
 - Cloud Init
-
-
-## TODO
 - Drives
   * Create the drives, add to the template
 - NICs
   * Create the nics, add to the template
+
+
+## TODO
+- Expand cloud init
 - Network bridges
 - ??PXE Boot??
