@@ -40,8 +40,7 @@
     template: 'vm-template.yaml.j2'
 
 - name: wait
-  shell: |
-          "oc get vmi -o jsonpath="{.status.interfaces[?(@.interfaceName=='{{ item.name }}')].ipAddress}"  -n user1 fedora-custom-network"
+  shell: "oc get vmi -o jsonpath=\"{.status.interfaces[?(@.interfaceName=='{{ item.name }}')].ipAddress}\"  -n user1 fedora-custom-network"
   register: result
   retries: 30
   until: result.stdout|length > 0
