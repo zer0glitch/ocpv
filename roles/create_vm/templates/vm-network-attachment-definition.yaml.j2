@@ -1,0 +1,19 @@
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  annotations:
+    description: {{ project }} network attachment definition
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/{{ item.bridge_name }}
+  name: {{ item.name }}{{ item.bridge_name }}
+  namespace: {{ project }}
+spec: 
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "{{ item.name }}{{item.bridge_name }}", 
+    "type": "cnv-bridge", 
+    "bridge": "{{ item.bridge_name }}", 
+{% if item.vlan_id is defined %}
+    "vlan":  {{ item.vlan_id }},
+{% endif %}
+    "macspoofchk": true
+  }'

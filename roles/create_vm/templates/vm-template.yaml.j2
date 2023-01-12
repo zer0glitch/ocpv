@@ -103,7 +103,7 @@ spec:
 {% if network_interfaces is defined %}
 {% for interface in network_interfaces %}
       - multus:
-          networkName: {{ interface.name }}-{{ interface.bridge_name }}
+          networkName: {{ interface.name }}{{ interface.bridge_name }}
         name: {{ interface.name }}
 {% endfor %}
 {% endif %}
