@@ -38,3 +38,10 @@
     state: present
     namespace: "{{ project }}"
     template: 'vm-template.yaml.j2'
+
+- name: wait
+  shell: oc get vmi -o jsonpath="{.status.interfaces[?(@.interfaceName=='eth1')].ipAddress}"  -n user1 fedora-custom-network
+  register: result
+  retries: 30
+  until: result.stdout|length > 0
+
