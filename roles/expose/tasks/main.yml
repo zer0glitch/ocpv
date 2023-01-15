@@ -1,37 +1,15 @@
-- name: Create the service {{ name }}
+- name: Create the service 
   kubernetes.core.k8s:
-  definition:
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: {{ name }}-service
-      namespace: {{ namespace }}
-    spec:
-      externalTrafficPolicy: Cluster
-      ports:
-        - protocol: TCP
-          port: {{ port }} #51183 {{ range(51000, 59000) | random }}
-          targetPort: {{ target_port }}
-      selector:
-         kubevirt.io/domain: {{ kubevirt_domain }}
-      type: LoadBalancer
+    state: present
+    namespace: "{{ namespace }}"
+    template: 'service.yml.j2'
 
-- name: Create the route {{ host }}-{{ name }}
+- debug:
+        msg: "{{ lookup('template', 'route.yml.j2') }}"
+
+
+- name: Create the route "{{ host }}-{{ name }}"
   kubernetes.core.k8s:
-  definition:
-    kind: Route
-    apiVersion: route.openshift.io/v1
-    metadata:
-      name: {{ name }}-route
-      namespace: {{ namespace }}
-      annotations:
-        openshift.io/host.generated: 'true'
-    spec:
-      host: {{ host }}
-      to:
-        kind: Service
-        name: {{ name }}-service
-        weight: 100
-      port:
-        targetPort: {{ target_port }}
-      wildcardPolicy: None
+    state: present
+    namespace: "{{ namespace }}"
+    template: 'route.yml.j2'
