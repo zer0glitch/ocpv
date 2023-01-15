@@ -28,26 +28,11 @@ spec:
         resources:
           requests:
             storage: {{ drive.size }}
-        #storageClassName: ocs-storagecluster-cephfs
-        #storageClassName: ocs-storagecluster-ceph-rbd
         volumeMode: {{ volume_mode | default('Block') }}
         accessModes:
           - {{ access_mode | default('ReadWriteMany') }}
       source:
         blank: {}
-  #- apiVersion: cdi.kubevirt.io/v1beta1
-  #  metadata:
-  #    name: {{ vm_name }}-{{ drive.name }}
-  #  spec:
-  #    pvc:
-  #      volumeMode: Filesystem
-  #      accessModes:
-  #      - ReadWriteMany
-  #      resources:
-  #        requests:
-  #          storage: {{ drive.size }}
-  #    source: 
-  #      blank: {}
 {% endfor %}
 {% endif %}
   running: true
