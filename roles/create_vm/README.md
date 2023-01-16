@@ -1,38 +1,110 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role will install Openshift Virtualization.  The OCP-v and Hyperconverged operators will be installed.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- ansible==2.10
+- python module openshift
+- python module jsonpath
+- python module kubernetes==12.0.0
+
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+  - include_role:
+      name: zer0glitch.ocpv.create_vm
+    vars:
+      vm_name: "{{ server_name }}"
+      project: "{{ project_name }}"
+      boot_source: fedora
+      boot_source_type: pvc
+      root_volume_size: 30
+      cores: 1
+      sockets: 1
+      threads: 1
+      memory: 2
+      password: r3dh4t1!
+      wait: True
+      network_interfaces:
+      - name: eth1
+        bridge_name: br1
+        wait: True
+      data_volumes:
+      - name: drive1
+        size: 10Gi
+      - name: drive2
+        size: 20Gi
+      cloud_init: |
+              #cloud-config
+              users:
+              - name: jamie
+                gecos: Ansible User
+                groups: users,admin,wheel
+                sudo: ALL=(ALL) NOPASSWD:ALL
+                shell: /bin/bash
+                lock_passwd: false
+                passwd: "{{ 'redhat' | password_hash('sha512') }}"
+                ssh_authorized_keys:
+                - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- kubernetes.core
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+  - include_role:
+      name: zer0glitch.ocpv.create_vm
+    vars:
+      vm_name: "{{ server_name }}"
+      project: "{{ project_name }}"
+      boot_source: fedora
+      boot_source_type: pvc
+      root_volume_size: 30
+      cores: 1
+      sockets: 1
+      threads: 1
+      memory: 2
+      password: r3dh4t1!
+      wait: True
+      network_interfaces:
+      - name: eth1
+        bridge_name: br1
+        wait: True
+      data_volumes:
+      - name: drive1
+        size: 10Gi
+      - name: drive2
+        size: 20Gi
+      cloud_init: |
+              #cloud-config
+              users:
+              - name: jamie
+                gecos: Ansible User
+                groups: users,admin,wheel
+                sudo: ALL=(ALL) NOPASSWD:ALL
+                shell: /bin/bash
+                lock_passwd: false
+                passwd: "{{ 'redhat' | password_hash('sha512') }}"
+                ssh_authorized_keys:
+                - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
 License
 -------
 
-BSD
+GPLv3
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Jamie Whetsell
+jamie@zeroglitch.com
