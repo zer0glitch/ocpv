@@ -4,9 +4,9 @@ Role Name
 This role will create a virtual machine in openshift virtualization
 
 The role will handle
-: Additonal network interfaces
-: Additional drives
-: cloud init
+* Additonal network interfaces
+* Additional drives
+* cloud init
 
 Requirements
 ------------
