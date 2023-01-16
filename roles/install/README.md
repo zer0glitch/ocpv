@@ -17,7 +17,9 @@ Requirements
 Role Variables
 --------------
 
+```
 - none
+```
 
 Dependencies
 ------------
@@ -27,6 +29,7 @@ Dependencies
 Example Playbook
 ----------------
 
+```
 ---
 - name: Install openshift virtualization
   hosts: localhost
@@ -35,6 +38,7 @@ Example Playbook
   - name: import deploy_cnv
     import_role:
             name: zer0glitch.ocpv.install
+```
 
 License
 -------
