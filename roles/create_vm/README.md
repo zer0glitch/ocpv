@@ -1,7 +1,12 @@
 Role Name
 =========
 
-This role will install Openshift Virtualization.  The OCP-v and Hyperconverged operators will be installed.
+This role will create a virtual machine in openshift virtualization
+
+The role will handle
+: Additonal network interfaces
+: Additional drives
+: cloud init
 
 Requirements
 ------------

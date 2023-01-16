@@ -1,7 +1,7 @@
 Role Name
 =========
 
-This role will install Openshift Virtualization.  The OCP-v and Hyperconverged operators will be installed.
+This role powers on/off a virtual machine
 
 Requirements
 ------------
