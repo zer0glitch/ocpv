@@ -1,18 +1,9 @@
 # Ansible Collection - zer0glitch.ocpv
 
-Documentation for the collection.
+This collection utilizes k8s ansible modules to attempt to automate some functions of Openshift Virtualization.  
 
-Create VM
-
-- User
-- Cloud Init
-- Drives
-  * Create the drives, add to the template
-- NICs
-  * Create the nics, add to the template
-
-
-## TODO
-- Expand cloud init
-- Network bridges
-- ??PXE Boot??
+[Install Openshift Virtualization](https://github.com/zer0glitch/ocpv/tree/main/roles/install)
+[Create Virtual Machine](https://github.com/zer0glitch/ocpv/tree/main/roles/create_vm)
+[Expose ports to virtual machine](https://github.com/zer0glitch/ocpv/tree/main/roles/expose)
+[Power on/off Virtual Machine](https://github.com/zer0glitch/ocpv/tree/main/roles/power)
+[Delete Virtaul Machine](https://github.com/zer0glitch/ocpv/tree/main/roles/delete_vm)
