@@ -15,6 +15,7 @@ Requirements
 
 Role Variables
 --------------
+```
 # This Server Hostname, and name in OCPv
 * vm_name: "{{ server_name }}"
 
@@ -74,6 +75,7 @@ Role Variables
 
 # Will store the cloud init in a secret.  This would be a cloud init definition
 * cloud_init_secret:
+```
 
 
 Dependencies
@@ -84,6 +86,7 @@ Dependencies
 Example Playbook
 ----------------
 
+```
   - include_role:
       name: zer0glitch.ocpv.create_vm
     vars:
@@ -119,6 +122,7 @@ Example Playbook
                 passwd: "{{ 'redhat' | password_hash('sha512') }}"
                 ssh_authorized_keys:
                 - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+```
 
 
 License
