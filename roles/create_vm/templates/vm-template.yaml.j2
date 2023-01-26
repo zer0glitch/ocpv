@@ -41,7 +41,7 @@ spec:
       annotations:
         vm.kubevirt.io/workload: server
       labels:
-        kubevirt.io/domain: "{{ vm_name }}-{{ random_string }}"
+        kubevirt.io/domain: "{{ vm_name }}-{{ project|lower }}"
         kubevirt.io/size: custom
     spec:
       domain:
