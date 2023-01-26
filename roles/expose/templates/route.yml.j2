@@ -1,0 +1,24 @@
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ name }}-route
+  namespace: {{ namespace }}
+  annotations:
+{% if host is defined %} 
+    openshift.io/host.generated: 'false' 
+{% else %}
+    openshift.io/host.generated: 'true' 
+{% endif %}
+spec:
+{% if host is defined %} 
+  host: {{ host }} 
+{% endif %}
+  to:
+    kind: Service
+    name: {{ name }}-service
+    weight: 100
+  port:
+    targetPort: {{ target_port }}
+  wildcardPolicy: None
+

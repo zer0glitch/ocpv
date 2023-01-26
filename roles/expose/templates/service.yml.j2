@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ name|lower }}-service
+  namespace: {{ namespace|lower }}
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - protocol: TCP
+      port: {{ port }}
+      targetPort: {{ target_port }}
+  selector:
+     kubevirt.io/domain: {{ kubevirt_domain }}-{{ namespace|lower }}
+  type: LoadBalancer
+
