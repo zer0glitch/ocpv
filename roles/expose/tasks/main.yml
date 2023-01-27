@@ -4,11 +4,7 @@
     namespace: "{{ namespace }}"
     template: 'service.yml.j2'
 
-- debug:
-        msg: "{{ lookup('template', 'route.yml.j2') }}"
-
-
-- name: Create the route "{{ host }}-{{ name }}"
+- name: Create the route "{{ name }}"
   kubernetes.core.k8s:
     state: present
     namespace: "{{ namespace }}"
